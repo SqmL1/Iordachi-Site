@@ -1,0 +1,1513 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap");
+@import "tailwindcss";
+
+/* ==========================================
+   01. THEME & GLOBAL STYLES
+   ========================================== */
+
+:root {
+  font-family: "Chakra Petch", sans-serif;
+  color: #ded5b9;
+  background: #23251d;
+  font-synthesis: none;
+
+  --bg: #23251d;
+  --surface: #303225;
+  --surface-light: #555b40;
+  --paper: #ded5b9;
+  --paper-text: #28291f;
+  --text: #ded5b9;
+  --muted: #cec4a7;
+  --accent: #707e57;
+  --border: #6b6445;
+  --highlight: #ebe6d6;
+  --mono: "Space Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+button, a { font: inherit; }
+button { color: inherit; }
+a { color: inherit; text-decoration: none; }
+
+/* ==========================================
+   02. BACKGROUND & ATMOSPHERE
+   ========================================== */
+
+.game-screen {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  padding: 0 clamp(22px, 4.2vw, 72px);
+  display: flex;
+  flex-direction: column;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(112, 126, 87, .16),
+      transparent 34%
+    ),
+    repeating-radial-gradient(
+      circle at 50% 48%,
+      transparent 0 107px,
+      rgba(206, 196, 167, .1) 108px 109px
+    ),
+    var(--bg);
+}
+
+.game-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .12;
+  z-index: 20;
+  background: repeating-linear-gradient(
+    0deg, transparent 0 3px, #000 4px
+  );
+}
+
+.game-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 100px #15170f;
+  z-index: 19;
+}
+
+.stars {
+  position: absolute;
+  width: 220px;
+  height: 200px;
+  opacity: .6;
+  background-image: radial-gradient(
+    var(--accent) 1.5px,
+    transparent 2px
+  );
+  background-size: 16px 16px;
+}
+
+.stars-left {
+  left: -40px;
+  top: 120px;
+  mask-image: linear-gradient(90deg, black, transparent);
+}
+
+.stars-right {
+  right: -40px;
+  bottom: 70px;
+  mask-image: linear-gradient(-90deg, black, transparent);
+}
+
+.spark {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  opacity: .45;
+}
+
+.spark::before,
+.spark::after {
+  content: "";
+  position: absolute;
+  background: var(--muted);
+}
+
+.spark::before {
+  width: 50px;
+  height: 2px;
+  top: 24px;
+}
+
+.spark::after {
+  width: 2px;
+  height: 50px;
+  left: 24px;
+}
+
+.spark-one {
+  left: 2%;
+  top: 36%;
+  transform: rotate(45deg);
+}
+
+.spark-two {
+  right: 3%;
+  top: 24%;
+  transform: rotate(45deg) scale(.7);
+}
+
+/* ==========================================
+   03. TOP DASHBOARD — ORIGINAL SIZE
+   ========================================== */
+
+.hud-header {
+  height: 100px;
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1fr;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.identity > span {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: var(--bg);
+  background: var(--paper);
+  font-weight: 700;
+  box-shadow: 4px 4px 0 var(--accent);
+}
+
+.identity div {
+  display: flex;
+  flex-direction: column;
+}
+
+.identity b {
+  font-size: 15px;
+  letter-spacing: .08em;
+}
+
+.identity small {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+
+.hud-header nav {
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.hud-header nav button {
+  position: relative;
+  height: 100%;
+  border: 0;
+  padding: 0 12px;
+  background: none;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  letter-spacing: .08em;
+}
+
+.hud-header nav button::after {
+  content: "";
+  position: absolute;
+  height: 5px;
+  left: 15%;
+  right: 15%;
+  top: 0;
+  border-radius: 0 0 4px 4px;
+  background: transparent;
+}
+
+.hud-header nav button.active {
+  color: var(--text);
+}
+
+.hud-header nav button.active::after {
+  background: var(--highlight);
+}
+
+.download-top {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--bg);
+  background: var(--paper);
+  border: 2px solid var(--accent);
+  padding: 11px 15px;
+  font-weight: 700;
+  box-shadow: 4px 4px 0 var(--border);
+  transition: .18s;
+}
+
+.download-top:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--border);
+}
+
+.arrow {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.arrow.down { transform: rotate(90deg); }
+
+.progress-track {
+  height: 5px;
+  margin: -3px auto 0;
+  width: 58%;
+  z-index: 6;
+  background: var(--border);
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-track i {
+  display: block;
+  width: 16%;
+  background: var(--accent);
+  border-radius: inherit;
+  transition: width .4s;
+}
+
+.progress-track i.engaged { width: 68%; }
+
+.progress-track span {
+  width: 7px;
+  height: 7px;
+  margin-top: -1px;
+  border-radius: 50%;
+  background: var(--highlight);
+  box-shadow: 0 0 8px var(--highlight);
+}
+
+/* ==========================================
+   04. MAIN INTERFACE
+   ========================================== */
+
+.interface {
+  width: min(1750px, 100%);
+  flex: 1;
+  min-height: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 4;
+
+  display: grid;
+  grid-template-columns:
+    minmax(230px, 300px)
+    minmax(500px, 1fr)
+    minmax(270px, 340px);
+
+  align-items: center;
+  gap: clamp(20px, 2.5vw, 45px);
+}
+
+/* ==========================================
+   05. LEFT FILE NAVIGATION
+   ========================================== */
+
+.file-nav > p,
+.stage-label {
+  margin: 0 0 23px;
+  color: var(--muted);
+  font-size: 15.6px;
+  letter-spacing: .16em;
+}
+
+.file-nav > button {
+  width: 100%;
+  min-height: 96px;
+  margin-bottom: 18px;
+  padding: 16px 21px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  cursor: pointer;
+
+  color: var(--text);
+  background: var(--surface);
+  border: 4px solid var(--border);
+  transition: .2s;
+}
+
+.file-nav > button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 8px;
+  width: 4px;
+  height: 100%;
+  background: repeating-linear-gradient(
+    var(--accent) 0 2px,
+    transparent 2px 5px
+  );
+}
+
+.file-nav > button span {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10.4px;
+}
+
+.file-nav > button b {
+  margin-top: 5px;
+  font-size: 19.5px;
+  text-transform: uppercase;
+}
+
+.file-nav > button i {
+  position: absolute;
+  right: -8px;
+  width: 10px;
+  height: 10px;
+  background: var(--highlight);
+  opacity: 0;
+}
+
+.file-nav > button:hover,
+.file-nav > button.active {
+  color: var(--bg);
+  background: var(--paper);
+  border-color: var(--accent);
+  transform: translateX(7px);
+}
+
+.file-nav > button:hover span,
+.file-nav > button.active span {
+  color: var(--border);
+}
+
+.file-nav > button.active i { opacity: 1; }
+
+/* Navigation arrows */
+
+.list-control {
+  height: 47px;
+  display: grid;
+  place-items: center;
+}
+
+.list-control span {
+  width: 0;
+  height: 0;
+  border-left: 44px solid transparent;
+  border-right: 44px solid transparent;
+}
+
+.list-control.up span {
+  border-bottom: 26px solid var(--muted);
+}
+
+.list-control.down span {
+  border-top: 26px solid var(--muted);
+}
+
+.list-control::after {
+  content: "";
+  position: absolute;
+  width: 35px;
+  height: 4px;
+  background: var(--paper);
+}
+
+/* ==========================================
+   06. CENTER DOCUMENT STAGE
+   ========================================== */
+
+.document-stage {
+  height: min(820px, 82vh);
+  min-height: 700px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 1200px;
+}
+
+.document-stage.has-selection {
+  height: min(1050px, 94vh);
+  min-height: 820px;
+  overflow: visible;
+}
+
+.document-stage::before {
+  content: "";
+  position: absolute;
+  width: min(45vw, 620px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(48, 50, 37, .92);
+  box-shadow: 0 0 0 52px rgba(107, 100, 69, .25);
+}
+
+.orbit {
+  position: absolute;
+  border: 1px solid rgba(206, 196, 167, .52);
+  border-radius: 50%;
+}
+
+.orbit::after {
+  content: "";
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--muted);
+  top: 13%;
+  left: 10%;
+}
+
+.orbit-one {
+  width: min(42vw, 575px);
+  aspect-ratio: 1;
+  transform: rotate(18deg);
+}
+
+.orbit-two {
+  width: min(34vw, 465px);
+  aspect-ratio: 1;
+  transform: rotate(-35deg);
+}
+
+.stage-label {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.papers {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+/* ==========================================
+   07. PAPER CARDS
+   ========================================== */
+
+.paper {
+  width: clamp(220px, 19.5vw, 280px);
+  height: clamp(312px, 27.3vw, 390px);
+  padding: 0;
+  position: absolute;
+
+  color: var(--paper-text);
+  background: var(--paper);
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  transform-origin: center;
+  box-shadow: 12px 14px 0 rgba(0, 0, 0, .45);
+
+  transition:
+    transform .45s cubic-bezier(.2,.9,.2,1),
+    opacity .3s,
+    filter .3s,
+    width .5s cubic-bezier(.2,.9,.2,1),
+    height .5s cubic-bezier(.2,.9,.2,1);
+}
+
+.paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .13;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 22px,
+    rgba(107, 100, 69, .45) 23px 24px
+  );
+}
+
+/* Same background for every paper */
+
+.paper-1,
+.paper-2,
+.paper-3,
+.paper.selected {
+  background: var(--paper);
+}
+
+/* Stacked positions */
+
+.paper-1 {
+  transform: translate(-65%, 1%) rotate(-13deg);
+}
+
+.paper-2 {
+  z-index: 2;
+  transform: translate(0, -3%) rotate(1deg);
+}
+
+.paper-3 {
+  transform: translate(65%, 2%) rotate(13deg);
+}
+
+/* Hover animations */
+
+.paper:hover {
+  z-index: 6;
+  transform:
+    translate(var(--hover-x, 0), -11%)
+    rotate(0)
+    scale(1.08);
+}
+
+.paper-1:hover { --hover-x: -65%; }
+.paper-3:hover { --hover-x: 65%; }
+
+.paper.dismissed {
+  opacity: 0;
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+/* Expanded paper */
+
+.paper.selected {
+  width: min(850px, 99%);
+  height: min(980px, 96%);
+  max-width: none;
+  z-index: 10;
+  cursor: zoom-out;
+  transform: translate(0, 0) rotate(0) scale(1);
+  box-shadow: 24px 28px 0 rgba(0, 0, 0, .5);
+}
+
+.paper.selected:hover {
+  transform: translate(0, 0) rotate(0) scale(1);
+}
+
+/* ==========================================
+   08. CLOSED PAPER PREVIEW
+   ========================================== */
+
+.paper-holes {
+  height: 23px;
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(50, 48, 45, .08);
+  border-bottom: 1px dashed rgba(26,25,34,.35);
+}
+
+.paper-holes i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: inset 1px 1px 2px #000;
+}
+
+.document-preview {
+  position: relative;
+  height: calc(100% - 23px);
+  padding: 27px 23px;
+  color: var(--paper-text);
+}
+
+.doc-code {
+  display: inline-block;
+  padding: 5px 8px;
+  border: 2px solid var(--paper-text);
+  font: 700 10.4px var(--mono);
+}
+
+.redacted-line {
+  width: 28%;
+  height: 8px;
+  position: absolute;
+  right: 21px;
+  top: 32px;
+  background: var(--paper-text);
+}
+
+.document-preview h2 {
+  margin: 39px 0 5px;
+  font-size: clamp(33px, 3.25vw, 49px);
+  line-height: .9;
+  text-transform: uppercase;
+  letter-spacing: -.06em;
+}
+
+.document-preview p {
+  margin: 0;
+  font: 700 13px var(--mono);
+  color: var(--border);
+}
+
+.preview-lines {
+  margin-top: 33px;
+}
+
+.preview-lines i {
+  display: block;
+  width: 100%;
+  height: 5px;
+  margin-bottom: 12px;
+  background: var(--paper-text);
+  opacity: .55;
+}
+
+.preview-lines i:nth-child(2) { width: 74%; }
+.preview-lines i:nth-child(3) { width: 88%; }
+.preview-lines i:nth-child(4) { width: 58%; }
+
+.document-preview > span {
+  position: absolute;
+  bottom: 23px;
+  left: 23px;
+  right: 23px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font: 700 10.4px var(--mono);
+  border-top: 2px solid var(--paper-text);
+  padding-top: 10px;
+}
+
+.document-preview .arrow {
+  width: 22px;
+  height: 22px;
+}
+
+.paper-corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border-left: 33px solid transparent;
+  border-top: 33px solid rgba(23,22,33,.17);
+}
+
+/* ==========================================
+   09. EXPANDED DOCUMENT — BASE
+   ========================================== */
+
+.document-detail {
+  height: calc(100% - 23px);
+  padding: 44px 52px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  color: var(--paper-text);
+}
+
+.paper.selected > .document-detail {
+  max-height: none;
+}
+
+.paper-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 2px solid var(--paper-text);
+  padding-bottom: 12px;
+  font: 700 14px var(--mono);
+}
+
+.document-detail h2 {
+  margin: 28px 0 14px;
+  font-size: clamp(68px, 5.5vw, 86px);
+  line-height: .95;
+  text-transform: uppercase;
+  letter-spacing: -.07em;
+}
+
+.role {
+  color: var(--border);
+  margin: 16px 0;
+  font: 700 17px var(--mono);
+  line-height: 1.4;
+}
+
+.paper-rule {
+  height: 7px;
+  margin: 21px 0;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--paper-text) 0 25px,
+    transparent 25px 30px
+  );
+}
+
+.lead {
+  max-width: 650px;
+  font-size: 27px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.paper-copy {
+  margin: 22px 0 0;
+  font-size: 19px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   10. PERSONNEL FILE
+   ========================================== */
+
+.bio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 2px solid var(--paper-text);
+}
+
+.bio-grid div {
+  min-width: 0;
+  padding: 16px;
+  border-right: 1px solid var(--paper-text);
+  border-bottom: 1px solid var(--paper-text);
+}
+
+.bio-grid div:nth-child(even) {
+  border-right: 0;
+}
+
+.bio-grid div:nth-child(n+3) {
+  border-bottom: 0;
+}
+
+.bio-grid small,
+.bio-grid b {
+  display: block;
+  font-family: var(--mono);
+  line-height: 1.5;
+}
+
+.bio-grid small {
+  font-size: 13px;
+}
+
+.bio-grid b {
+  font-size: 16px;
+  color: var(--border);
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   11. WORK HISTORY
+   ========================================== */
+
+.history {
+  margin-top: 30px;
+  border-top: 2px solid var(--paper-text);
+}
+
+.history > div {
+  display: grid;
+  grid-template-columns: 135px minmax(0, 1fr);
+  gap: 24px;
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(40,41,31,.4);
+}
+
+.history time {
+  font: 700 14px var(--mono);
+  line-height: 1.5;
+  color: var(--border);
+}
+
+.history section {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: anywhere;
+}
+
+.history section b {
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+.history section span {
+  font: 700 15px var(--mono);
+  line-height: 1.5;
+}
+
+.history section p {
+  margin: 10px 0 0;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+/* ==========================================
+   12. MISSION ARCHIVE
+   ========================================== */
+
+.mission-list {
+  margin-top: 30px;
+  border-top: 2px solid var(--paper-text);
+}
+
+.mission-list > div {
+  display: grid;
+  grid-template-columns: 45px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--paper-text);
+}
+
+.mission-list > div > span {
+  font: 700 15px var(--mono);
+  color: var(--border);
+}
+
+.mission-list section {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.mission-list section b {
+  display: block;
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+.mission-list section p {
+  margin: 7px 0 0;
+  font: 700 15px var(--mono);
+  line-height: 1.6;
+}
+
+.mission-list section .paper-copy {
+  margin-top: 12px;
+  font-family: "Chakra Petch", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.mission-list em {
+  grid-column: 2;
+  font: 700 14px var(--mono);
+  font-style: normal;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+/* ==========================================
+   13. DOCUMENT CONTROLS
+   ========================================== */
+
+.close-file {
+  position: absolute;
+  bottom: 2%;
+  z-index: 12;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  font: 700 12px var(--mono);
+  cursor: pointer;
+}
+
+.close-file span {
+  color: var(--bg);
+  background: var(--muted);
+  padding: 3px 5px;
+  margin-left: 6px;
+}
+
+/* ==========================================
+   14. RIGHT INFORMATION PANEL
+   ========================================== */
+
+.panel-index {
+  font: 700 12px var(--mono);
+  color: var(--accent);
+}
+
+.info-panel h1 {
+  margin: 10px 0 26px;
+  color: var(--text);
+  font-size: clamp(38px, 3.9vw, 57px);
+  line-height: .9;
+  text-transform: uppercase;
+}
+
+.info-box {
+  min-height: 220px;
+  padding: 29px;
+  color: var(--text);
+  background: var(--surface-light);
+  border-radius: 12px 2px 12px 12px;
+  box-shadow: inset 0 0 25px rgba(0,0,0,.22);
+}
+
+.info-box p {
+  margin: 0;
+  min-height: 124px;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--accent);
+  padding-top: 16px;
+  font: 700 10.4px var(--mono);
+}
+
+.status-row b {
+  color: var(--highlight);
+}
+
+.action-button {
+  width: 100%;
+  min-height: 83px;
+  margin: 21px 0 34px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 23px;
+
+  color: var(--bg);
+  background: var(--paper);
+  border: 4px double var(--accent);
+  border-radius: 20px 4px 20px 4px;
+  font-size: 23px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: inset 0 -9px 0 rgba(112,126,87,.2);
+  transition: .15s;
+}
+
+.action-button:hover {
+  transform: translateY(-3px);
+  background: var(--highlight);
+}
+
+.action-button .arrow {
+  width: 22px;
+  height: 22px;
+}
+
+.system-readout {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font: 700 9px var(--mono);
+  color: var(--accent);
+}
+
+.system-readout i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--muted);
+  box-shadow: 0 0 8px var(--muted);
+  animation: pulse 1.5s steps(2) infinite;
+}
+
+.system-readout b {
+  margin-left: auto;
+  color: var(--muted);
+}
+
+/* ==========================================
+   15. FOOTER
+   ========================================== */
+
+.hud-footer {
+  min-height: 72px;
+  position: relative;
+  z-index: 5;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-top: 1px solid var(--border);
+  color: var(--accent);
+  font: 700 10.4px var(--mono);
+  letter-spacing: .1em;
+}
+
+.hud-footer a {
+  color: var(--muted);
+}
+
+@keyframes pulse {
+  50% { opacity: .3; }
+}
+
+/* ==========================================
+   16. TABLET — 721px TO 1000px
+   ========================================== */
+
+@media (min-width: 721px) and (max-width: 1000px) {
+  .hud-header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .hud-header nav {
+    display: none;
+  }
+
+  .interface {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 20px;
+    min-height: 720px;
+  }
+
+  .info-panel {
+    display: none;
+  }
+
+  .file-nav > button {
+    min-height: 90px;
+    padding: 14px;
+  }
+
+  .file-nav > button b {
+    font-size: 18px;
+  }
+
+  .document-stage {
+    height: 720px;
+    min-height: 680px;
+  }
+
+  .document-stage.has-selection {
+    height: 800px;
+    min-height: 800px;
+  }
+
+  .document-stage::before {
+    width: 520px;
+  }
+
+  .orbit-one { width: 480px; }
+  .orbit-two { width: 390px; }
+
+  .paper {
+    width: 210px;
+    height: 310px;
+  }
+
+  .paper.selected {
+    width: min(650px, 98%);
+    height: min(760px, 96%);
+  }
+
+  .document-preview h2 {
+    font-size: 36px;
+  }
+
+  .document-detail {
+    padding: 32px 36px;
+  }
+
+  .document-detail h2 {
+    font-size: 60px;
+  }
+
+  .paper-copy,
+  .history section p,
+  .mission-list section .paper-copy {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .history section b,
+  .mission-list section b {
+    font-size: 19px;
+  }
+
+  .mission-list section p {
+    font-size: 13px;
+  }
+}
+
+/* ==========================================
+   17. MOBILE — UP TO 720px
+   ========================================== */
+
+@media (max-width: 720px) {
+  .game-screen {
+    padding: 0 16px;
+    overflow-y: auto;
+  }
+
+  /* Header */
+
+  .hud-header {
+    height: 82px;
+    grid-template-columns: 1fr auto;
+  }
+
+  .hud-header nav,
+  .identity small {
+    display: none;
+  }
+
+  .download-top {
+    padding: 9px 10px;
+    font-size: 10px;
+  }
+
+  .progress-track {
+    width: 100%;
+  }
+
+  /* Main layout */
+
+  .interface {
+    min-height: 800px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 24px;
+  }
+
+  .info-panel {
+    display: none;
+  }
+
+  /* File navigation */
+
+  .file-nav {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    order: 2;
+  }
+
+  .file-nav > p,
+  .list-control {
+    display: none;
+  }
+
+  .file-nav > button {
+    min-height: 70px;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .file-nav > button span {
+    font-size: 10px;
+  }
+
+  .file-nav > button b {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+
+  .file-nav > button:hover,
+  .file-nav > button.active {
+    transform: translateY(-3px);
+  }
+
+  /* Document stage */
+
+  .document-stage {
+    width: 100%;
+    height: 590px;
+    min-height: 590px;
+    order: 1;
+  }
+
+  .document-stage.has-selection {
+    height: 700px;
+    min-height: 700px;
+  }
+
+  .document-stage::before {
+    width: 400px;
+  }
+
+  .orbit-one { width: 390px; }
+  .orbit-two { width: 310px; }
+
+  .paper {
+    width: 150px;
+    height: 220px;
+  }
+
+  .paper-1 {
+    transform: translate(-52%, 5%) rotate(-12deg);
+  }
+
+  .paper-3 {
+    transform: translate(52%, 5%) rotate(12deg);
+  }
+
+  .paper-1:hover { --hover-x: -52%; }
+  .paper-3:hover { --hover-x: 52%; }
+
+  .paper.selected {
+    width: 98%;
+    height: 640px;
+  }
+
+  /* Document content */
+
+  .document-preview h2 {
+    font-size: clamp(24px, 6vw, 33px);
+  }
+
+  .document-preview p {
+    font-size: 11px;
+  }
+
+  .document-detail {
+    padding: 22px 20px;
+  }
+
+  .document-detail h2 {
+    font-size: 45px;
+  }
+
+  .paper-heading {
+    font-size: 10px;
+  }
+
+  .role {
+    font-size: 11px;
+  }
+
+  .lead {
+    font-size: 17px;
+    line-height: 1.4;
+  }
+
+  .paper-copy,
+  .history section p,
+  .mission-list section .paper-copy {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .bio-grid div {
+    padding: 10px;
+  }
+
+  .bio-grid small {
+    font-size: 10px;
+  }
+
+  .bio-grid b {
+    font-size: 12px;
+  }
+
+  /* Work history */
+
+  .history {
+    overflow-wrap: anywhere;
+  }
+
+  .history > div {
+    grid-template-columns: 85px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px 0;
+  }
+
+  .history time,
+  .history section span {
+    font-size: 11px;
+  }
+
+  .history section b {
+    font-size: 17px;
+  }
+
+  /* Projects */
+
+  .mission-list > div {
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: 10px;
+    padding: 14px 0;
+  }
+
+  .mission-list section b {
+    font-size: 17px;
+  }
+
+  .mission-list section p {
+    font-size: 12px;
+  }
+
+  .mission-list em {
+    font-size: 11px;
+  }
+
+  .close-file {
+    font-size: 10px;
+  }
+
+  /* Footer */
+
+  .hud-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 15px 0;
+    font-size: 10px;
+  }
+
+  .hud-footer span:first-child {
+    display: none;
+  }
+}
+
+/* ==========================================
+   18. SMALL MOBILE — UP TO 430px
+   ========================================== */
+
+@media (max-width: 430px) {
+  .identity div {
+    display: none;
+  }
+
+  .document-stage {
+    height: 540px;
+    min-height: 540px;
+  }
+
+  .document-stage.has-selection {
+    height: 700px;
+    min-height: 700px;
+  }
+
+  .paper {
+    width: 128px;
+    height: 190px;
+  }
+
+  .document-preview {
+    padding: 15px 12px;
+  }
+
+  .document-preview h2 {
+    font-size: 21px;
+    margin-top: 22px;
+  }
+
+  .document-preview > span {
+    left: 12px;
+    right: 12px;
+  }
+
+  .paper.selected {
+    width: 98%;
+    height: 640px;
+  }
+
+  .document-detail h2 {
+    font-size: 39px;
+  }
+
+  .history > div {
+    grid-template-columns: 72px minmax(0, 1fr);
+    padding: 9px 0;
+  }
+
+  .history section p {
+    display: block;
+  }
+}
+
+/* ==========================================
+   19. ACCESSIBILITY
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
+
+/* ==========================================
+   CONTACT LINKS
+   ========================================== */
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.contact-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 13px;
+
+  color: #28291f;
+  background: transparent;
+  border: 1.5px solid #6b6445;
+
+  font: 700 13px "Space Mono", monospace;
+  text-decoration: none;
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.contact-links a:hover {
+  background: #28291f;
+  color: #ded5b9;
+  transform: translateY(-3px);
+}
+
+.contact-links a:focus-visible {
+  outline: 3px solid #707e57;
+  outline-offset: 3px;
+}
+
+.contact-links .external-icon {
+  opacity: 0.6;
+  transition: transform 0.2s ease;
+}
+
+.contact-links a:hover .external-icon {
+  opacity: 1;
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 720px) {
+  .contact-links {
+    gap: 8px;
+  }
+
+  .contact-links a {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+}
