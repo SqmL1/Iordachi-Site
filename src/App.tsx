@@ -277,6 +277,7 @@ function PaperDocument({
 
     <button
 
+
       className={`paper paper-${index + 1}${isSelected ? " selected" : ""}${selected && !isSelected ? " dismissed" : ""}`}
 
       onClick={() => onSelect(id)}
@@ -502,16 +503,6 @@ export default function App() {
             ))}
 
           </div>
-
-          {selected && (
-
-            <button className="close-file" onClick={() => setSelected(null)}>
-
-              CLOSE FILE <span>ESC</span>
-
-            </button>
-
-          )}
 
         </section>
 

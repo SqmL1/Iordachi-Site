@@ -1511,3 +1511,57 @@ a { color: inherit; text-decoration: none; }
     font-size: 11px;
   }
 }
+
+@media (min-width: 1001px) {
+  .paper.selected {
+    width: min(680px, 99%);
+    height: min(790px, 96%);
+  }
+
+  .document-stage.has-selection {
+    height: min(850px, 90vh);
+    min-height: 650px;
+  }
+
+  .paper.selected > .document-detail {
+    padding: 32px 40px;
+  }
+}
+
+
+/* Position the expanded paper as the button's anchor */
+.paper.selected {
+  position: absolute;
+}
+
+/* Close button in the top-right of the document */
+.paper.selected .close-file {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  bottom: auto;
+  left: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+  background: #28291f;
+  color: #ded5b9;
+  border: 1px solid #6b6445;
+  border-radius: 0;
+
+  font: 700 11px "Space Mono", monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+  z-index: 20;
+  transition: background 0.2s ease;
+}
+
+.paper.selected .close-file:hover {
+  background: #555b40;
+}
