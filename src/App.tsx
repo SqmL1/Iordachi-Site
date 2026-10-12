@@ -137,7 +137,7 @@ function BioContent() {
   </a>
 
   <a
-    href="https://www.linkedin.com/in/YOUR-PROFILE/"
+    href="https://www.linkedin.com/in/samuil-iordachi-019320292/"
     target="_blank"
     rel="noopener noreferrer"
   >
@@ -147,7 +147,7 @@ function BioContent() {
   </a>
 
   <a
-    href="https://github.com/YOUR-USERNAME"
+    href="https://github.com/SqmL1"
     target="_blank"
     rel="noopener noreferrer"
   >
